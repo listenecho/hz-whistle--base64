@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css"  media="all">
+    <link rel="stylesheet" href="./layui.css">
+    <script src="//unpkg.com/layui@2.6.8/dist/layui.js"> </script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="layui-card">
+        <h5 class="layui-card-header">埋点事件筛选</h5>
+        <div class="layui-card-body">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                  <label class="layui-form-label">内置事件</label>
+                  <div class="layui-input-block">
+                    <input type="checkbox" name="_pagview" title="页面浏览事件（_pagview）">
+                    <input type="checkbox" name="_pageleave" title="页面离开事件（_pageleave）" checked>
+                    <input type="checkbox" name="_web_stay" title="心跳事件（_web_stay）" checked>
+                    <input type="checkbox" name="_web_click" title="点击事件（_web_click）" checked>
+                    <input type="checkbox" name="__web_longpress" title="长按事件（__web_longpress）" checked>
+                    <input type="checkbox" name="_sign_up]" title="登陆事件（_sign_up）" checked>
+                    <input type="checkbox" name="_sign_in" title="注册事件（_sign_in）" checked>
+                    <input type="checkbox" name="_sign_out" title="注销事件（_sign_out）" checked>
+                  </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">自定义事件</label>
+                    <div class="layui-input-block">
+                      <input type="checkbox" name="#_pagview" title="浏览事件（xxx_pagview）">
+                      <input type="checkbox" name="#_btn_click" title="点击事件(xxx_btn_click)" checked>
+                    </div>
+                  </div>
+                <div class="layui-form-item layui-form-text">
+                  <label class="layui-form-label">自定义规则</label>
+                  <div class="layui-input-block">
+                    <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                  </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                      <button class="layui-btn" lay-submit lay-filter="formDemo">确认</button>
+                      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                  </div>
+              </form>
+        </div>
+      </div>
+      <script src="./beidou.js"></script>
+</body>
+</html>
