@@ -1,0 +1,224 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+.page-content-wrap {
+  background-color: #fddea5;
+  height: 94vh;
+  margin: 0;
+}
+
+.layui-inline {
+  padding: 5px;
+}
+.my-btn {
+  font-size: 12px;
+  padding: 5px;
+  line-height: 0;
+  height: 30px;
+}
+.my-btn .layui-icon {
+  font-size: 10px;
+}
+thead tr th { 
+  position: relative;
+  padding: 0 10px;
+}
+thead tr th:not(thead tr th:last-child)::after {
+  display: inline-block;
+  content: "";
+  position: absolute;
+  height: 15px;
+  width: 1px;
+  right: 0px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: gray;
+  z-index: 3;
+}
+
+td,
+th {
+  /* border-right :1px solid gray; */
+  border-bottom: 1px solid #eee;
+  width: 100px;
+  height: 25px;
+  box-sizing: border-box;
+  text-align: left;
+}
+thead th { text-align: center;}
+th {
+  background-color: #5FB878;
+  color: #f1f1f1;
+}
+
+table {
+  border-collapse: separate;
+  table-layout: fixed;
+  width: 100%; /* 固定寬度 */
+}
+
+td:first-child,
+th:first-child {
+  /* position: sticky;
+  left: 0; 
+  z-index: 1; */
+}
+
+thead tr th {
+  position: sticky;
+  top: 0; /* 第一列最上 */
+}
+
+th:first-child() {
+  z-index: 2;
+  width: 35px;
+}
+tbody tr td:first-child {
+  text-align: center;
+  font-weight: 700;
+}
+tbody tr td { 
+  font-size: 10px;
+  color: #000093;
+ text-align: center;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+}
+tbody tr.highlight {
+  background: #337ab7;
+  color: #fff;
+}
+tbody tr.highlight td {
+  color: #fff !important;
+}
+button {
+  outline: none;
+  background-color: #fff;
+  border: none;
+  border-right: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+button.active {
+  background-color: #f1f1f1;
+}
+.tab-list {
+  border-bottom: 1px solid #ccc;
+  color: red;
+}
+.error-item  td{
+  color: #e83929 !important;
+}
+
+#urlResult,
+#bodyResult {
+  padding: 20px 10px;
+  text-align: left;
+  font-size: 12px;
+}
+
+.json_key {
+  color: #92278f;
+  font-weight: bold;
+}
+.json_null {
+  color: #f1592a;
+  font-weight: bold;
+}
+.json_string {
+  color: #3ab54a;
+  font-weight: bold;
+}
+.json_number {
+  color: #25aae2;
+  font-weight: bold;
+}
+.json_boolean {
+  color: #f98280;
+  font-weight: bold;
+}
+.json_link {
+  color: #61d2d6;
+  font-weight: bold;
+}
+.highLightKey {
+  color: #f40;
+}
+.column {
+  overflow: hidden;
+}
+.column-left {
+  height: 92vh;
+  background-color: #fff;
+  position: relative;
+  float: left;
+}
+.column-right {
+  height: 92vh;
+  padding: 16px;
+  background-color: #eee;
+  box-sizing: border-box;
+ overflow-y: scroll;
+}
+.resize-save {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  bottom: 0;
+  left: 0;
+  overflow-x: hidden;
+}
+.resize-bar {
+  width: 65vw;
+  height: inherit;
+  resize: horizontal;
+  cursor: ew-resize;
+  cursor: col-resize;
+  opacity: 0;
+  overflow: scroll;
+}
+/* 拖拽线 */
+.resize-line {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border-right: 2px solid #eee;
+  border-left: 1px solid #bbb;
+  pointer-events: none;
+}
+.resize-bar:hover ~ .resize-line,
+.resize-bar:active ~ .resize-line {
+  border-left: 1px dashed skyblue;
+}
+.resize-bar::-webkit-scrollbar {
+  width: 50px;
+  height: inherit;
+}
+
+/* Firefox只有下面一小块区域可以拉伸 */
+@supports (-moz-user-select: none) {
+  .resize-bar:hover ~ .resize-line,
+  .resize-bar:active ~ .resize-line {
+    border-left: 1px solid #bbb;
+  }
+  .resize-bar:hover ~ .resize-line::after,
+  .resize-bar:active ~ .resize-line::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    bottom: 0;
+    right: -8px;
+    background: url(./resize.svg);
+    background-size: 100% 100%;
+  }
+}
+
+.disply-none { display: none;}
+.layui-textarea {
+  -webkit-user-select:text !important
+
+}
