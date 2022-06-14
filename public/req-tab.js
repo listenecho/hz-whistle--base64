@@ -36,7 +36,7 @@
     var loadJSON = function() {
       urlResult.innerHTML = '计算中...';
       urlResult.onclick = noop;
-      getUrlJSON({ text: item.url }, function(data) {
+      getUrlJSON({ text: item.url, method: item.method, poastData: item.req ? item.req.base64 : undefined  }, function(data) {
         if (!data) {
           urlResult.onclick = loadJSON;
           urlResult.innerHTML = '请求失败，请点击<strong>重试</strong>！';
