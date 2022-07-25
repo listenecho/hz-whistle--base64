@@ -41,3 +41,9 @@ w2 uninstall whistle.hz-parse-base64
 
 详细 API 参见：https://github.com/avwo/whistle/blob/master/assets/tab.html
 
+
+## 版本记录
+
+### 1.1.2
+
+* 新增POST请求解析
