@@ -47,3 +47,6 @@ w2 uninstall whistle.hz-parse-base64
 ### 1.1.2
 
 * 新增POST请求解析
+
+### 1.1.3
+* 新增加密报文，非对称解密
