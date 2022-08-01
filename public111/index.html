@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>网站后台管理模版</title>
+	<link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css" media="all">
+	<link rel="stylesheet" type="text/css" href="./static/admin/css/admin.css" />
+	<link rel="stylesheet" href="./static/admin/css/index.css">
+	<script src="./static/admin/js/module/bignumber.js"></script>
+	<script src="./static/admin/js/module/jquery.json.js"></script>
+	<script src="./static/admin/js/module/util.js"></script>
+	<script src="https://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+</head>
+
+<body>
+	<div class="page-content-wrap">
+		<!-- 顶部操作区域 -->
+		<div class="layui-inline">
+			<button id="clean_btn" class="layui-btn layui-btn-small layui-btn-danger hidden-xs my-btn"><i
+					class="layui-icon">&#xe640;</i> Clear</button>
+			<button id="filter_btn" class="layui-btn layui-btn-small layui-btn-warm hidden-xs my-btn"><i
+					class="layui-icon">&#xe63d;</i> Filter</button>
+		</div>
+		<div class="column">
+			<div class="column-left">
+				<div class="resize-bar"></div>
+				<div class="resize-line"></div>
+				<div class="resize-save">
+					<div class="table">
+						<div class="table-wapper">
+							<table cellspacing="0" border="0" cellpadding="0" id="table-list">
+								<thead>
+									<tr border="1">
+										<th style="width: 20px;">Index</th>
+										<th style="width: 50px;">Url</th>
+										<th>Event</th>
+										<th style="width: 30px;">Lib</th>
+										<th style="width: 40px;">PvId(简写)</th>
+										<th style="width: 30px;">Status</th>
+									</tr>
+								</thead>
+								<tbody id="t-body">
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="column-right">
+				<div class="json" id="json">
+
+				</div>
+			</div>
+		</div>
+		<div class="layui-card disply-none" id="filter_wapper">
+			<h5 class="layui-card-header">埋点事件筛选</h5>
+			<div class="layui-card-body">
+				<form class="layui-form" action="">
+					<div class="layui-form-item">
+						<label class="layui-form-label">内置事件</label>
+						<div class="layui-input-block insider_event">
+							<input type="checkbox" name="_pageview" title="页面浏览事件（_pagview）">
+							<input type="checkbox" name="_pageleave" title="页面离开事件（_pageleave）">
+							<input type="checkbox" name="_web_stay" title="心跳事件（_web_stay）">
+							<input type="checkbox" name="_web_click" title="点击事件（_web_click）">
+							<input type="checkbox" name="_web_exposure" title="曝光事件（_web_exposure）">
+							<input type="checkbox" name="_web_longpress" title="长按事件（__web_longpress）">
+							<input type="checkbox" name="_sign_up" title="登陆事件（_sign_up）">
+							<input type="checkbox" name="_sign_in" title="注册事件（_sign_in）">
+							<input type="checkbox" name="_sign_out" title="注销事件（_sign_out）">
+						</div>
+					</div>
+					<!-- <div class="layui-form-item custom_event">
+						<label class="layui-form-label">自定义事件</label>
+						<div class="layui-input-block">
+							<input type="checkbox" name="_pagview" title="浏览事件（xxx_pagview）" >
+							<input type="checkbox" name="_click" title="点击事件(xxx_click)" >
+						</div>
+					</div> -->
+					<div class="layui-form-item terminal-type">
+						<label class="layui-form-label">终端类型</label>
+						<div class="layui-input-block">
+							<input type="checkbox" name="js" title="Web">
+							<input type="checkbox" name="miniprogram" title="App">
+							<input type="checkbox" name="ios" title="Ios">
+							<input type="checkbox" name="android" title="Android">
+
+						</div>
+					</div>
+				</form>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" id="submit">确认</button>
+						<button type="reset" id="reset-btn" class="layui-btn layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="./static/admin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./static/admin/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			layui.use(['form', 'jquery', 'layer', 'dialog'], function () {
+				var $ = layui.jquery;
+
+				//修改状态
+				$('#table-list').on('click', '.table-list-status', function () {
+					var That = $(this);
+					var status = That.attr('data-status');
+					var id = That.parent().attr('data-id');
+					if (status == 1) {
+						That.removeClass('layui-btn-normal').addClass('layui-btn-warm').html('隐藏').attr('data-status', 2);
+					} else if (status == 2) {
+						That.removeClass('layui-btn-warm').addClass('layui-btn-normal').html('显示').attr('data-status', 1);
+
+					}
+				})
+
+			});
+		</script>
+		<script>
+			const EVENT_COLOR_MAP = {
+				"_pageview": "#e17b34",
+				"_pageleave": "#59b9c6",
+				"_web_stay": "#68be8d",
+				"_web_click": "#aacf53",
+				"__web_longpress": "#f5b1aa",
+				"_sign_up": "#ea5506",
+				"_sign_in": "#99ab4e",
+				"_web_exposure": "#460e44",
+			}
+			function getURLpathname(url) {
+				if (!url || !~url.indexOf("http")) return
+				if (!!~url.indexOf("#")) {
+					return url.split("#").pop()
+				}
+				try {
+					return new URL(url).pathname
+				} catch (e) {
+					return
+					console.log(e);
+				}
+			}
+			class NetEvent {
+				eventList = []
+				renderedIdMap = {}
+				currentLine = 0
+				table = document.getElementById("t-body")
+				clean_btn = document.getElementById("clean_btn")
+				filter_btn = $("#filter_btn")
+				filter_wapper = $("#filter_wapper")
+				modalIndex = null
+				observer = null
+				formData = {
+					insideEvent: [],
+					customEvent: [],
+					customRule: [],
+					terminalType: []
+				}
+				notShowIdsCache = []
+				constructor() {
+					this.init()
+				}
+				initObserver() {
+					this.observer = new IntersectionObserver(entries => {
+						entries.forEach(entry => {
+							console.log(entry);
+							if (!entry.isIntersecting) {
+								// 往下
+								// $(".resize-save").animate({ scrollTop: $(".resize-save").prop("scrollHeight") + $(".data-item").height() }, 500)
+								// hight 跑到上面去了
+							}
+						})
+					})
+				}
+
+				moiterHightRow() {
+					this.observer.observe(document.getElementsByClassName("highlight")[0])
+				}
+				init() {
+					this.getEventData()
+					this.initQueryEvent()
+					this.initObserver()
+					this.initHandleFilterEvent()
+					this.handleCleanDataList()
+					this.initkeyEvent()
+					this.initFilterEvent()
+				}
+				initFilerEle() {
+					let insideEvent = $(".insider_event input[type='checkbox']");
+					for (let i = 0; i < insideEvent.length; i++) {
+						this.formData.insideEvent.push()
+						this.formData.insideEvent.includes(insideEvent[i].name) && $(insideEvent[i]).attr("checked", true)
+					}
+
+				}
+
+				initScrollToBottom() {
+					console.log($(".resize-save").scrollTop(), $(".table").prop("offsetHeight"));
+					if ($(".table").prop("offsetHeight") - $(".resize-save").scrollTop() > 100) {
+						// 什么条件呢?
+						$(".resize-save").animate({ scrollTop: $(".resize-save").prop("scrollHeight") }, 500)
+					}
+				}
+				initQueryEvent() {
+
+					$("#submit").off("click").on("click", () => {
+
+						let insideEvent = $(".insider_event input[type='checkbox']:checked");
+						const insderEventChecked = []
+						for (let i = 0; i < insideEvent.length; i++) {
+							insderEventChecked.push(insideEvent[i].name)
+						}
+						this.formData.insideEvent = insderEventChecked
+
+						let customEvent = $(".custom_event input[type='checkbox']:checked");
+						const customEventChecked = []
+						for (let i = 0; i < customEvent.length; i++) {
+							customEventChecked.push(customEvent[i].name)
+						}
+						this.formData.customEvent = customEventChecked
+
+
+						let terminalType = $(".terminal-type input[type='checkbox']:checked");
+						const terminalTypeChecked = []
+
+						for (let i = 0; i < terminalType.length; i++) {
+							terminalTypeChecked.push(terminalType[i].name)
+						}
+						this.formData.terminalType = terminalTypeChecked
+
+						console.log(this.formData);
+						this.resloveFilterData()
+						layer.close(this.modalIndex)
+					})
+				}
+				initHandleFilterEvent() {
+					$("#reset-btn").off("click").on("click", () => {
+						$(".layui-input-block input[type='checkbox']:checked").each(function () {
+							$(this).prop("checked", false)
+							// $(el).next().addClass('layui-form-checked');
+							$(this).next().removeClass('layui-form-checked');
+						})
+						this.formData = {
+							insideEvent: [],
+							customEvent: [],
+							customRule: [],
+							terminalType: []
+						}
+						layer.close(this.modalIndex)
+					})
+				}
+				// 过滤数据
+				resloveFilterData() {
+					// 匹配到特征相同的行,移除dom
+					// 1. 清除内置事件
+					const insderEvent = this.formData.insideEvent
+					const terminalType = this.formData.terminalType
+					const newList = [...this.eventList]
+					// 通过原始数据筛选reqID
+
+					const insderEventId = newList.map(_ => {
+						let event = _.event
+						if (insderEvent.includes(event)) {
+							return _.reqId
+						}
+						if (insderEvent.includes(event)) {
+							return _.reqId
+						}
+					}).filter(_ => !!_)
+					const terminalTypeId = newList.map(_ => {
+						let lib = _.lib ? _.lib.toLowerCase() : ""
+						if (terminalType.includes(lib)) {
+							return _.reqId
+						}
+					}).filter(_ => !!_)
+					const notShowIds = [...new Set([...insderEventId, ...terminalTypeId])]
+
+
+					// 将上次隐藏的ID保存起来,然后与下一次ID做对比,找出差异,然后重新设置为显示
+					notShowIds.forEach(_ => {
+						$(`tbody tr[data-reqid=${_}]`).css('display', 'none')
+						const cacheIndex = this.notShowIdsCache.indexOf(_)
+						if (!~cacheIndex) this.notShowIdsCache.slice(cacheIndex, 1)
+					})
+					this.notShowIdsCache.forEach(_ => {
+						$(`tbody tr[data-reqid=${_}]`).css('display', 'table-row')
+					})
+					// 清除对应已经渲染的id
+
+					this.notShowIdsCache = notShowIds
+				}
+
+				// 数据相关
+				getEventData() {
+					let that = this
+					setInterval(() => {
+						fetch('cgi-bin/list', {
+							method: 'get'
+						}).then(function (response) {
+							response.json().then(res => {
+								that.resloveEventData(res)
+							})
+						})
+					}, 1000)
+				}
+				resloveEventData(data) {
+					if (!Array.isArray(data)) return []
+					const newData = data.filter(item => {
+						if (item.url && item.url.indexOf("data") !== -1) {
+							const base64 = getQueryParam(item.url, "data")
+							const ext = getQueryParam(item.url, "ext")
+							const decodeBase64Json = JSON.parse(base64decode(base64))
+							const decodeBase64 = base64decode(base64)
+							const properties = decodeBase64Json.properties || {}
+
+							item.json = decodeBase64Json || {}
+							item.ext = ext
+							item.event = decodeBase64Json._event || decodeBase64Json._e
+							item.pvId = properties._page_visit_id || decodeBase64Json._pv_id
+							item.title = properties._title || decodeBase64Json._title
+							item.url = properties._url || decodeBase64Json._url
+							item.pathname = properties._url_path || decodeBase64Json._url_p
+							item.lib = decodeBase64Json._lib || (decodeBase64Json.lib ? decodeBase64Json.lib._lib : "-")
+							item.jsonString = decodeBase64
+							return item
+						}
+
+					})
+					this.eventList.push(...newData)
+					this.renderEventTable()
+				}
+				renderEventTable() {
+					this.eventList.forEach((item, index) => {
+						if (this.shouldRender(item)) {
+							const newTr = this.tableRowTemplate(item, index)
+							this.table.appendChild(newTr)
+							this.renderedIdMap[item.reqId] = true
+						}
+					})
+					// this.initScrollToBottom()
+				}
+
+
+
+				shouldRender(item) {
+					if (!this.renderedIdMap[item.reqId]) {
+						const insderEvent = this.formData.insideEvent
+						const customEvent = this.formData.customEvent
+						const terminalType = this.formData.terminalType
+						if (!insderEvent.includes(item.event) && !terminalType.includes(item.lib && item.lib.toLowerCase())) return true
+					}
+
+				}
+				tableRowTemplate(info = {}, index = 0) {
+					let that = this
+					const { url, title, event, pvId, statusCode, lib, pathname, reqId } = info
+					const tr = document.createElement("tr")
+					const td1 = document.createElement("td")
+					const td2 = document.createElement("td")
+					const td3 = document.createElement("td")
+					const td4 = document.createElement("td")
+					const td5 = document.createElement("td")
+					const td6 = document.createElement("td")
+					td1.innerText = index + 1
+					td2.innerText = getURLpathname(url) || pathname || '-'
+					td3.innerText = event
+					td4.innerText = pvId ? pvId.split("-").pop() : "-"
+					td5.innerText = statusCode
+					td6.innerText = lib
+					// 事件颜色设置
+					Object.keys(EVENT_COLOR_MAP).forEach(_ => {
+						!!~_.indexOf(event) && td3.setAttribute('style', `color: ${EVENT_COLOR_MAP[_]}`)
+					})
+
+					tr.setAttribute('data-reqId', `${reqId}`)
+					tr.setAttribute('class', `data-item`)
+					tr.classList.add("data-item")
+					td3.classList.add("event")
+					td4.classList.add("pv-id")
+					const colorList = ["rgb(162, 32, 65)", "rgb(238, 130, 124)"]
+					// 获取上一个tr td 的pvid
+					const prePvIdNode = $(".data-item:last-child  .pv-id")
+					if (statusCode != 200) {
+						tr.classList.add("error-item")
+					}
+
+
+					if (!prePvIdNode[0]) {
+						$(td4).css("color", colorList[0])
+					} else {
+						const preColor = $(prePvIdNode[0]).css("color")
+						if (prePvIdNode[0].innerText != td4.innerText) {
+							const curColor = colorList.find(_ => _ !== preColor)
+							$(td4).css("color", curColor)
+						} else {
+							$(td4).css("color", preColor)
+						}
+					}
+
+					tr.addEventListener("click", that.selectTR.bind(that))
+					tr.appendChild(td1)
+					tr.appendChild(td2)
+					tr.appendChild(td3)
+					tr.appendChild(td6)
+					tr.appendChild(td4)
+					tr.appendChild(td5)
+					return tr
+				}
+				// 键盘上下按键移动
+				initkeyEvent() {
+					let that = this
+					document.onkeydown = function (e) {
+						event.preventDefault();
+						e = window.event || e;
+						switch (e.keyCode) {
+							case 38:
+								that.currentLine--;
+								if (that.currentLine === 0) {
+									that.currentLine = 1
+								}
+								that.changeItem();
+								break;
+							case 40:
+								that.currentLine++;
+								that.changeItem();
+								break;
+							default:
+								break;
+						}
+					}
+				}
+				changeItem() {
+					if (document.all)
+						var it = document.getElementById("table-list").children[0];
+					else
+						var it = document.getElementById("table-list");
+					for (let i = 1; i < it.rows.length; i++) {
+						it.rows[i].className = "";
+					}
+					if (this.currentLine < 0)
+						this.currentLine = it.rows.length - 1;
+					if (this.currentLine == it.rows.length)
+						this.currentLine = 1;
+					it.rows[this.currentLine].className = "highlight";
+					this.observer.disconnect()
+					this.moiterHightRow()
+					this.renderParseJson(this.eventList[this.currentLine - 1].jsonString)
+				}
+				renderParseJson(string) {
+					var json = document.getElementById("json")
+					var c = formatData(string)
+					json.innerHTML = c
+				}
+				selectTR() {
+					this.currentLine = window.event.srcElement.parentElement.rowIndex;
+					this.changeItem();
+				}
+
+				handleCleanDataList() {
+					let that = this
+					$(this.clean_btn).off("click").on("click", (e) => {
+						e.stopPropagation()
+						this.eventList = []
+						this.table.innerHTML = ""
+					})
+				}
+
+				ininEvent() {
+
+				}
+				// 筛选事件相关
+				initFilterEvent() {
+					this.filter_btn.off("click").on("click", () => {
+						this.modalIndex = layer.open({
+							type: 1,
+							title: false,
+							closeBtn: 0,
+							area: ['auto'],
+							area: ['850px',],
+							skin: 'layui-layer-nobg', //没有背景色
+							shadeClose: true,
+							content: this.filter_wapper
+						});
+						setTimeout(() => { this.filter_wapper.removeClass("disply-none") }, 0)
+					})
+				}
+			}
+			new NetEvent().init()
+
+		</script>
+		<script>
+
+		</script>
+</body>
+
+</html>

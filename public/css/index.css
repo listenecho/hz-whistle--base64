@@ -1,0 +1,44 @@
+/*!******************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@teamsupercell/typings-for-css-modules-loader/src/index.js!./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./node_modules/postcss-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js!./src/client/components/draggle-layout/index.less ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************/
+.index__root--Y4tvv {
+  position: relative;
+  display: flex;
+  margin: 24px auto;
+}
+.index__root--Y4tvv .index__left--VZ0OW {
+  height: 100%;
+  position: relative;
+}
+.index__root--Y4tvv .index__left--VZ0OW .index__handler--C25vb {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: 100%;
+  user-select: none;
+  color: #fff;
+  text-align: center;
+  cursor: ew-resize;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.index__root--Y4tvv .index__right--IAXkR {
+  height: 100%;
+}
+
+/*!*****************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@teamsupercell/typings-for-css-modules-loader/src/index.js!./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./node_modules/postcss-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js!./src/client/pages/result/index.less ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************/
+.index__rightContainer--wa0bg {
+  height: 500px;
+  width: 500px;
+  background-color: red;
+}
+.index__leftContainer--GZSNd {
+  height: 100px;
+  width: 500px;
+  background-color: pink;
+}
+

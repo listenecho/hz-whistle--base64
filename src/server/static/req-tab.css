@@ -1,0 +1,53 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+button {
+  outline: none;
+  background-color: #fff;
+  border: none;
+  border-right: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+button.active {
+  background-color: #f1f1f1;
+}
+.tab-list {
+  border-bottom: 1px solid #ccc;
+  color: red;
+}
+
+#urlResult,
+#bodyResult {
+  padding: 20px 10px;
+  text-align: left;
+  font-size: 12px;
+}
+
+.json_key {
+  color: #92278f;
+  font-weight: bold;
+}
+.json_null {
+  color: #f1592a;
+  font-weight: bold;
+}
+.json_string {
+  color: #3ab54a;
+  font-weight: bold;
+}
+.json_number {
+  color: #25aae2;
+  font-weight: bold;
+}
+.json_boolean {
+  color: #f98280;
+  font-weight: bold;
+}
+.json_link {
+  color: #61d2d6;
+  font-weight: bold;
+}
+.json_array_brackets {
+}
