@@ -5,6 +5,7 @@ const loaders = require("./config/loader")
 module.exports = {
     entry: {
         index: './src/client/pages/result/index.tsx',
+        report: './src/client/pages/report/index.tsx',
     },
     output: {
         filename: 'js/[name].js',

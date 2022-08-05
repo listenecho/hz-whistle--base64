@@ -23,7 +23,12 @@ module.exports = [
         }
       },
       "postcss-loader", // css后处理器，暂时只引入了autoprefixer
-      "less-loader",
+     {
+      loader: 'less-loader',
+      options: {
+        globalVars: require(path.resolve(__dirname, '../src/client/theme/color.json')),
+      }
+     }
     ],
   },
   {

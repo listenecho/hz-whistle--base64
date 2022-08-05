@@ -13,6 +13,11 @@ module.exports = [
     filename: "./index.html", // 指定文件名称，同时可以指定路径
     template: path.resolve(__dirname, "../src/client/index.html"),
   }),
+  new HtmlWebpackPlugin({
+    chunks: ["report"], // 该文件包含哪些entry
+    filename: "./report.html", // 指定文件名称，同时可以指定路径
+    template: path.resolve(__dirname, "../src/client/index.html"),
+  }),
   new CopyWebpackPlugin({
     patterns: [
       {

@@ -1,0 +1,227 @@
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@teamsupercell/typings-for-css-modules-loader/src/index.js!./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./node_modules/postcss-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js??ruleSet[1].rules[1].use[4]!./src/client/pages/report/index.less ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************/
+.index__container--SeZfx {
+  width: 100%;
+  padding: 10px;
+  min-height: 100vh;
+  color: #05CB0D;
+  background-color: #1E0528;
+  box-sizing: border-box;
+}
+.index__container--SeZfx h2 {
+  text-align: center;
+}
+.index__container--SeZfx h3 {
+  color: #F8C0FF;
+  font-size: 16px;
+  margin: 20px 0;
+}
+.index__card--PCij7 {
+  width: 98%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #FFEEFF;
+  box-sizing: border-box;
+}
+.index__textContainer--KqmoW {
+  display: inline-block;
+  margin: 8px;
+  color: #FFEEFF;
+}
+.index__textContainer--KqmoW.index__small--A3Ovu {
+  font-size: 12px;
+}
+.index__textContainer--KqmoW.index__middle--ERegj {
+  font-size: 14px;
+}
+.index__textContainer--KqmoW.index__big--ZmTjf {
+  font-size: 16px;
+}
+
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@teamsupercell/typings-for-css-modules-loader/src/index.js!./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./node_modules/postcss-loader/dist/cjs.js!./node_modules/less-loader/dist/cjs.js??ruleSet[1].rules[1].use[4]!./src/client/assets/reset.css ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************/
+/**
+ * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
+ * http://cssreset.com
+ */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  font-weight: normal;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+ol,
+ul,
+li {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* custom */
+a {
+  color: #7e8c8d;
+  text-decoration: none;
+  -webkit-backface-visibility: hidden;
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:vertical {
+  height: 5px;
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  width: 5px;
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+html,
+body {
+  width: 100%;
+  font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", "微软雅黑", sans-serif;
+}
+body {
+  line-height: 1;
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+html {
+  overflow-y: scroll;
+}
+/*清除浮动*/
+.reset__clearfix--rOH9D:before,
+.reset__clearfix--rOH9D:after {
+  content: " ";
+  display: inline-block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.reset__clearfix--rOH9D {
+  *zoom: 1;
+}
+/*隐藏*/
+.reset__dn--jNgNj {
+  display: none;
+}
+
