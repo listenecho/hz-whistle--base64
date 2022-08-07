@@ -5,6 +5,7 @@ declare namespace IndexLessNamespace {
     container: string;
     middle: string;
     small: string;
+    subText: string;
     textContainer: string;
   }
 }

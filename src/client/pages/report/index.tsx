@@ -1,75 +1,76 @@
-import React, { ReactHTML, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "./index.less";
 import { render } from "react-dom";
 import '../../assets/reset.css'
-import  * as XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import CheckBox from 'rc-checkbox';
 import { resloveEventData } from "../../utils/data";
 
 const color = require("../../theme/color.json")
 const DEFAULT_EVENTS = ["_pageview", "_pageleave", "_web_stay", "_web_click", "__web_longpress", "_sign_up", "_sign_in", "_web_exposure"]
 function readWorkbookFromLocalFile(file: any, callback?: any) {
-	var reader = new FileReader();
-	reader.onload = function(e: any) {
-		var data = e.target.result;
-		var workbook = XLSX.read(data, {type: 'binary'});
+  var reader = new FileReader();
+  reader.onload = function (e: any) {
+    var data = e.target.result;
+    var workbook = XLSX.read(data, { type: 'binary' });
     const { Sheets: sheets } = workbook;
-  let parseData = Object.keys(sheets).reduce((finalData, sheetName) => {
-    let sheetData = XLSX.utils.sheet_to_json(sheets[sheetName]);
-    finalData.push({ sheetName, sheetData })
-    return finalData;
-}, []);
-  // 缓存本地
-  localStorage.setItem("beidouTestOriginData", JSON.stringify(parseData[0].sheetData))
-  
-		if(callback) callback(parseData[0].sheetData);
-	};
-	reader.readAsBinaryString(file);
+    let parseData = Object.keys(sheets).reduce((finalData, sheetName) => {
+      let sheetData = XLSX.utils.sheet_to_json(sheets[sheetName]);
+      finalData.push({ sheetName, sheetData })
+      return finalData;
+    }, []);
+    console.log(parseData);
+
+    // 缓存本地
+    localStorage.setItem("beidouTestOriginData", JSON.stringify(parseData[0].sheetData))
+
+    if (callback) callback(parseData[0].sheetData);
+  };
+  reader.readAsBinaryString(file);
 }
 
 
 export default function ReportPage() {
-  const handlFileUpload = (e: any)  =>{
+  const handlFileUpload = (e: any) => {
     readWorkbookFromLocalFile(e.target.files[0], setOriginTestData)
   }
   const fetchEvents = useRef([])
   const [originTestData, setOriginTestData] = useState([])
-  const originTestEvents = originTestData.map(_ => _["事件"])
+  const originTestEvents = originTestData.map(_ => _["Event"])
   const [cacheOriginTestEvents, setCacheOriginTestEvents] = useState([])
   const [eventStatistics, setEventStatistics] = useState({
     defaultEvents: {},
     customeEvents: {}
   })
-  
+
   useEffect(() => {
     init()
   }, [])
-  
+
 
   useEffect(() => {
-    setInterval(() => {getEventData()}, 2000)
+    setInterval(() => { getEventData() }, 2000)
   }, [])
 
   function init() {
     getBeidouTestOriginData()
   }
 
-  function 	getEventData() {
+  function getEventData() {
     setInterval(() => {
       fetch('cgi-bin/list', {
         method: 'get'
       }).then(function (response) {
         response.json().then(res => {
           const data = resloveEventData(res)
-          if(data.length) {
+          if (data.length) {
             fetchEvents.current.push(...data)
             // 执行计算
             calculateNetEventToatl()
           }
-       
         })
       })
-    }, 1000)
+    }, 2000)
   }
 
 
@@ -80,36 +81,32 @@ export default function ReportPage() {
    */
 
   function calculateNetEventToatl() {
-    console.log(eventStatistics  , 1);
+    const _eventStatistics = JSON.parse(JSON.stringify(eventStatistics))
+    const { defaultEvents, customeEvents } = _eventStatistics
+    console.log(fetchEvents.current);
     
-   const  _eventStatistics = JSON.parse(JSON.stringify(eventStatistics))
-   const {defaultEvents, customeEvents} = _eventStatistics
     fetchEvents.current.forEach(item => {
-      console.log(item);
-      
-      if(item.event) {
-        if(DEFAULT_EVENTS.includes(item.event)) {
-          if(defaultEvents[item.event] ) {
-            defaultEvents[item.event].count ++ 
+      if (item.event) {
+        if (DEFAULT_EVENTS.includes(item.event)) {
+          if (defaultEvents[item.event]) {
+            defaultEvents[item.event].count++
           } else {
             defaultEvents[item.event] = {
               count: 1
             }
           }
         } else {
-          if(customeEvents[item.event] ) {
-            customeEvents[item.event].count ++ 
+          if (customeEvents[item.event]) {
+            customeEvents[item.event].count++
           } else {
             customeEvents[item.event] = {
               count: 1
             }
           }
         }
-     
+
       }
-      
     })
-    console.log(_eventStatistics  , 2);
 
     setEventStatistics({
       customeEvents: _eventStatistics.customeEvents,
@@ -117,47 +114,45 @@ export default function ReportPage() {
     })
   }
   function getBeidouTestOriginData() {
-   const data = localStorage.getItem("beidouTestOriginData")
-   setOriginTestData(data ? JSON.parse(data): [])
-   
+    const data = localStorage.getItem("beidouTestOriginData")
+    setOriginTestData(data ? JSON.parse(data) : [])
+
   }
 
 
-  function handleOriginEventChange (e: any) {
-    const {name, checked} = e.target
+  function handleOriginEventChange(e: any) {
+    const { name, checked } = e.target
     console.log(name, checked);
-    if(checked) {
+    if (checked) {
       // 加入本地缓存
       setCacheOriginTestEvents([...cacheOriginTestEvents, name])
     } else {
       // 从本地缓存剔除
       const arr = [...cacheOriginTestEvents]
-     const index = arr.findIndex(_ => _ === name)
-     arr.splice(index, 1)
-     console.log(arr);
-     
-     setCacheOriginTestEvents(arr)
+      const index = arr.findIndex(_ => _ === name)
+      arr.splice(index, 1)
+      setCacheOriginTestEvents(arr)
     }
-    
+
   }
   return (
     <div className={style.container}>
-      <h2>埋点 SDK 测试实时分析报告</h2> <input type={"file"}   onChange={handlFileUpload}/> 
+      <h2>埋点 SDK 测试实时分析报告</h2> <input type={"file"} onChange={handlFileUpload} />
       <h3>预期事件</h3>
       <Card>
         <div>
           {
-            originTestData.map((item, i) => <div key={i}><CheckBox onChange={handleOriginEventChange} name={item["事件"]} value={item["事件"]}/> <i>{item["事件"]}</i></div>)
+            originTestData.map((item, i) => <div key={i}><CheckBox onChange={handleOriginEventChange} name={item["Event"]} value={item["Event"]} /> <i>{item["Event"]}</i></div>)
           }
           <div>
-          <Text text={"总数: "} />
-          <Text text={originTestEvents.length} customeStyle={{ color: color["ansiGreen"]}} />
+            <Text text={"总数: "} />
+            <Text text={originTestEvents.length} customeStyle={{ color: color["ansiGreen"] }} />
 
-          <Text text={"选中: "} />
-          <Text text={cacheOriginTestEvents.length} customeStyle={{ color: color["ansiGreen"]}} />
+            <Text text={"选中: "} />
+            <Text text={cacheOriginTestEvents.length} customeStyle={{ color: color["ansiGreen"] }} />
           </div>
         </div>
-        </Card>
+      </Card>
       <h3>事件统计</h3>
       <Card>
         <div>
@@ -166,15 +161,26 @@ export default function ReportPage() {
           </div>
           <div>
             <Text text={"自定义事件: "} />
-            <Text text={"93"} customeStyle={{ color: color["ansiGreen"]}} />
+            <Text text={Object.keys(eventStatistics.customeEvents).length || "-"} customeStyle={{ color: color["ansiGreen"] }} />
+            {
+              Object.keys(eventStatistics.customeEvents).map(key => {
+                return <p className={style.subText}><span style={{ color: "rgba(150, 150, 150, .8)" }}>{key}</span>: <i>{eventStatistics.customeEvents[key].count}</i></p>
+              })
+            }
+
           </div>
           <div>
             <Text text={"全埋点事件: "} />
-            <Text text={"44"} customeStyle={{ color: color["ansiGreen"]}} />
+            <Text text={Object.keys(eventStatistics.defaultEvents).length || "-"} customeStyle={{ color: color["ansiGreen"] }} />
+            {
+              Object.keys(eventStatistics.defaultEvents).map(key => {
+                return <p className={style.subText}><span style={{ color: "rgba(150, 150, 150, .8)" }}>{key}</span>: <i>{eventStatistics.defaultEvents[key].count}</i></p>
+              })
+            }
           </div>
         </div>
-        </Card>
-        
+      </Card>
+
       <Card>
         <div>
           <div>
@@ -182,15 +188,15 @@ export default function ReportPage() {
           </div>
           <div>
             <Text text={"成功总数: "} />
-            <Text text={"93"} customeStyle={{ color: color["ansiGreen"]}} />
+            <Text text={"93"} customeStyle={{ color: color["ansiGreen"] }} />
           </div>
           <div>
             <Text text={"失败总数: "} />
-            <Text text={"93"} customeStyle={{ color: color["ansiBrightRed"]}} />
+            <Text text={"93"} customeStyle={{ color: color["ansiBrightRed"] }} />
           </div>
         </div>
-        </Card>
-       
+      </Card>
+
       <Card>
         <div>
           <div>
@@ -198,48 +204,48 @@ export default function ReportPage() {
           </div>
           <div>
             <Text text={"预期事件: "} />
-            <Text text={"93"} customeStyle={{ color: color["ansiGreen"]}} />
+            <Text text={"93"} customeStyle={{ color: color["ansiGreen"] }} />
           </div>
           <div>
-          <Text text={"实际事件: "} />
-          <Text text={"93"} customeStyle={{ color: color["ansiBrightRed"]}} />
+            <Text text={"实际事件: "} />
+            <Text text={"93"} customeStyle={{ color: color["ansiBrightRed"] }} />
           </div>
           <div>
-          <Text text={"测试耗时: "} />
-          <Text text={"1m56s"} customeStyle={{ color: color["ansiGreen"]}} />
+            <Text text={"测试耗时: "} />
+            <Text text={"1m56s"} customeStyle={{ color: color["ansiGreen"] }} />
           </div>
         </div>
-        </Card>
+      </Card>
 
 
-        <h3>事件结果</h3>
-        <Card>
+      <h3>事件结果</h3>
+      <Card>
         <div>
           <div>
             <Text size="big" text={"错误事件"} />
           </div>
           <div>
             <Text text={"总数: "} />
-            <Text text={"93"} customeStyle={{ color: color["ansiBrightRed"]}} />
+            <Text text={"93"} customeStyle={{ color: color["ansiBrightRed"] }} />
           </div>
           <div>
             <Text text={"描述: "} />
-            <Text text={"93"} customeStyle={{ color: color["ansiGreen"]}} />
+            <Text text={"93"} customeStyle={{ color: color["ansiGreen"] }} />
           </div>
           <div>
-          <Text text={"名称: "} />
-          <Text text={"93"} customeStyle={{ color: color["ansiBrightRed"]}} />
+            <Text text={"名称: "} />
+            <Text text={"93"} customeStyle={{ color: color["ansiBrightRed"] }} />
           </div>
           <div>
-          <Text text={"状态: "} />
+            <Text text={"状态: "} />
           </div>
-          <div> <Text text={"原因"}  /></div>
-          <div> <Text text={"属性"}  /></div>
-          <div>  <Text text={"旅程"}  /></div>
+          <div> <Text text={"原因"} /></div>
+          <div> <Text text={"属性"} /></div>
+          <div>  <Text text={"旅程"} /></div>
         </div>
-        </Card>
+      </Card>
 
-        
+
 
     </div>
   );
